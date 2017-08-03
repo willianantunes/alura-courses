@@ -9,6 +9,23 @@ import static org.junit.Assert.*;
 import static org.mockito.Mockito.*;
 
 public class UsuarioDaoTest {
+	private Session session;
+	private UsuarioDao usuarioDao;
+
+	@Before
+	public void antesDeCadaTeste() {
+		session = new CriadorDeSessao().getSession();
+		usuarioDao = new UsuarioDao(session);
+		
+		session.beginTransaction();
+	}
+	
+	@After
+	public void aposCadaTeste() {
+		session.getTransaction().rollback();
+		session.close();
+	}
+	
 	@Test
 	public void maneiraErradaDeveEncontrarPeloNomeEEmailMockado() {
 		Session session = mock(Session.class);
@@ -31,8 +48,6 @@ public class UsuarioDaoTest {
 	
 	@Test
 	public void deveEncontrarPeloNomeEEmailMockado() {
-		Session session = new CriadorDeSessao().getSession();
-		UsuarioDao usuarioDao = new UsuarioDao(session);
 		
 		Usuario novoUsuario = new Usuario("Formigão A Cara Eu da Silva", "estaminosflaw@ant.com.br");
 		usuarioDao.salvar(novoUsuario);
@@ -42,7 +57,15 @@ public class UsuarioDaoTest {
 		
 		assertEquals("Formigão A Cara Eu da Silva", usuarioDoBanco.getNome());
 		assertEquals("estaminosflaw@ant.com.br", usuarioDoBanco.getEmail());
+	}
+	
+	@Test
+	public void retornaNuloSeUsuarioNaoExisteNoBanco() {
+		Session session = new CriadorDeSessao().getSession();
+		UsuarioDao usuarioDao = new UsuarioDao(session);
+
+		Usuario usuarioDoBanco = usuarioDao.porNomeEEmail("Forelack guy", "forelack@manfre.com.br");
 		
-		session.close();
+		assertNull(usuarioDoBanco);
 	}
 }
