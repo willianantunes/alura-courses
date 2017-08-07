@@ -85,16 +85,18 @@ public class LeilaoDao {
 	
 	@SuppressWarnings("unchecked")
 	public List<Leilao> listaLeiloesDoUsuario(Usuario usuario) {
-		return session.createQuery("select lance.leilao " +
-								   "from Lance lance " +
-								   "where lance.usuario = :usuario")
+		String myHQL = "SELECT DISTINCT lance.leilao FROM Lance lance "
+				+ "WHERE lance.usuario = :usuario";		
+		return session.createQuery(myHQL)
 				.setParameter("usuario", usuario).list();
 	}
 	
 	public double getValorInicialMedioDoUsuario(Usuario usuario) {
-		return (Double) session.createQuery("select avg(lance.leilao.valorInicial) " +
-											"from Lance lance " +
-											"where lance.usuario = :usuario")
+		String myHQL = "SELECT AVG(leilao.valorInicial) FROM Leilao leilao "
+				+ "WHERE leilao IN "
+					+ "(SELECT DISTINCT lei FROM Leilao lei INNER JOIN lei.lances "
+						+ "l WHERE l.usuario = :usuario)";		
+		return (Double) session.createQuery(myHQL)
 					.setParameter("usuario", usuario)
 					.uniqueResult();
 	}

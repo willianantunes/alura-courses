@@ -68,4 +68,36 @@ public class UsuarioDaoTest {
 		
 		assertNull(usuarioDoBanco);
 	}
+	
+	@Test
+	public void deveDeletarUmUsuario() {
+		Usuario usuario = new Usuario("Parreira", "parreira@sister.com.br");
+		
+		usuarioDao.salvar(usuario);
+		usuarioDao.deletar(usuario);
+		
+		session.flush();
+		session.clear();
+		
+		Usuario usuarioDeletado = usuarioDao.porNomeEEmail(usuario.getNome(), usuario.getEmail());
+		
+		assertNull(usuarioDeletado);
+	}
+	
+	@Test
+	public void deveAlterarUsuario() {
+		Usuario usuario = new Usuario("Parreira", "parreira@sister.com.br");
+		
+		usuarioDao.salvar(usuario);
+		session.flush();
+		
+		usuario.setNome("Parreira Palmeirense");
+		usuario.setEmail("parreira.palmeirense@sister.com.br");
+		
+		usuarioDao.atualizar(usuario);
+		session.flush();
+		
+		assertNull(usuarioDao.porNomeEEmail("Parreira", "parreira@sister.com.br"));
+		assertNotNull(usuarioDao.porNomeEEmail("Parreira Palmeirense", "parreira.palmeirense@sister.com.br"));
+	}
 }
