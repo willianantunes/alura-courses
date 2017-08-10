@@ -20,4 +20,16 @@ public class NovoUsuarioPage {
 		
 		campoNome.submit();		
 	}
+
+	public boolean temBotaoSalvar() {
+		return driver.getPageSource().contains("Salvar!");
+	}
+
+	public boolean validacaoNomeObrigatorio() {
+		return driver.getPageSource().contains("Nome obrigatorio!");
+	}
+
+	public boolean validacaoEmailObrigatorio() {
+		return driver.getPageSource().contains("E-mail obrigatorio!");
+	}
 }
