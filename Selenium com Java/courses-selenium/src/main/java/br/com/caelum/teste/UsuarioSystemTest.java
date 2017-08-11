@@ -4,46 +4,48 @@ import static org.junit.Assert.*;
 
 import java.io.IOException;
 import java.nio.file.Paths;
+import java.util.Optional;
 
-import org.junit.After;
-import org.junit.Before;
-import org.junit.BeforeClass;
-import org.junit.Test;
-import org.openqa.selenium.*;
-import org.openqa.selenium.firefox.FirefoxDriver;
+import org.junit.*;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.chrome.ChromeDriver;
 
 public class UsuarioSystemTest {
-	private WebDriver myDriver = null;
+	private WebDriver driver = null;
 	private UsuarioPage usuarios = null;
 	private HomePage home  = null;
 	
 	@BeforeClass
 	public static void valeParaTodosOsTestes() throws IOException {
-		System.setProperty("webdriver.gecko.driver", Paths.get("src/main/resources/geckodriver.exe").toRealPath().toString());
+		System.setProperty("webdriver.chrome.driver", Paths.get("src/main/resources/chromedriver.exe").toRealPath().toString());
+		// System.setProperty("webdriver.gecko.driver", Paths.get("src/main/resources/geckodriver.exe").toRealPath().toString());
 	}
 	
 	@Before
 	public void antesComecarCadaTeste() {
-		myDriver = new FirefoxDriver();
-		usuarios = new UsuarioPage(myDriver);
-		home = new HomePage(myDriver);
+		driver = new ChromeDriver();
+		driver.get("http://localhost:8080/apenas-teste/limpa");
+		
+		usuarios = new UsuarioPage(driver);
+		home = new HomePage(driver);
+		
 		
 		usuarios.visita();
 	}
 	
 	@After
 	public void aposEncerrarCadaTeste() {
-		myDriver.close();
+		driver.close();
 	}
 	
-	@Test
+//	@Test
 	public void deveAdicionarUmUsuario() throws IOException {		
 		usuarios.novo().cadastra("A Cara Eu", "reginaldo@acaraeu.com.br");
 		
 		assertTrue(usuarios.existeNaListagem("A Cara Eu", "reginaldo@acaraeu.com.br"));
 	}
 
-	@Test
+//	@Test
 	public void deveInformarQueNomeObrigatorio() {
 		NovoUsuarioPage form = usuarios.novo();
 		form.cadastra("", "reginaldo@acaraeu.com.br");
@@ -51,7 +53,7 @@ public class UsuarioSystemTest {
 		assertTrue(form.validacaoNomeObrigatorio());
 	}
 	
-	@Test
+//	@Test
 	public void deveInformarAmbasMensagemNomeEEmail() {
 		NovoUsuarioPage form = usuarios.novo();
 		form.cadastra("", "");
@@ -60,7 +62,29 @@ public class UsuarioSystemTest {
 		assertTrue(form.validacaoEmailObrigatorio());
 	}
 	
+//	@Test
+	public void confirmaExclusaoUsuarioRecemCadastrado() {
+		NovoUsuarioPage form = usuarios.novo();
+		form.cadastra("A Cara Eu", "reginaldo@acaraeu.com.br");
+		
+		usuarios.deletaUsuarioNaPosicao(1);
+		assertFalse(usuarios.existeNaListagem("A Cara Eu", "reginaldo@acaraeu.com.br"));		
+	}
+	
 	@Test
+	public void deveAlterarUsuario() {
+		if (usuarios.temUsuarioCadastrado())
+			usuarios.apagarUsuariosCadastrados();
+		
+		NovoUsuarioPage form = usuarios.novo();
+		form.cadastra("A Cara Eu", "reginaldo@acaraeu.com.br");
+		
+		usuarios.editaUsuarioNaPosicao(1).altera("A Cara Eu...", "reginaldo.picapau@acaraeu.com.br");
+		
+		assertTrue(usuarios.existeNaListagem("A Cara Eu...", "reginaldo.picapau@acaraeu.com.br"));
+	}
+	
+//	@Test
 	public void linkNovoUsuarioFunciona() {
 		home.visita();
 		assertTrue(home.menuUsuario().novo().temBotaoSalvar());
