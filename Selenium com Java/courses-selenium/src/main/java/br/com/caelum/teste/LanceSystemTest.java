@@ -13,6 +13,8 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 
 import br.com.caelum.teste.cenario.CriadorDeCenarios;
+import br.com.caelum.teste.pageobjects.DetalhesDoLeilaoPage;
+import br.com.caelum.teste.pageobjects.LeiloesPage;
 
 public class LanceSystemTest {
 	private WebDriver driver = null;

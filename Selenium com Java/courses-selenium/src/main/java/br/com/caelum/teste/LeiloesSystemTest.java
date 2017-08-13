@@ -9,6 +9,10 @@ import org.junit.*;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 
+import br.com.caelum.teste.pageobjects.LeiloesPage;
+import br.com.caelum.teste.pageobjects.NovoLeilaoPage;
+import br.com.caelum.teste.pageobjects.UsuarioPage;
+
 public class LeiloesSystemTest {
 	private WebDriver driver = null;
 	private LeiloesPage leiloes = null;

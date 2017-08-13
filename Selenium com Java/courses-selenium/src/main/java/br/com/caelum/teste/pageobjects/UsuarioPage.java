@@ -1,8 +1,10 @@
-package br.com.caelum.teste;
+package br.com.caelum.teste.pageobjects;
 
 import org.openqa.selenium.Alert;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
+
+import br.com.caelum.teste.config.URLDaAplicacao;
 
 public class UsuarioPage {
 	private WebDriver driver = null;
@@ -12,7 +14,7 @@ public class UsuarioPage {
 	}
 
 	public void visita() {
-		driver.get("http://localhost:8080/usuarios");
+		driver.get(URLDaAplicacao.getUrlBase() + "/usuarios");
 	}
 	
 	public NovoUsuarioPage novo() {

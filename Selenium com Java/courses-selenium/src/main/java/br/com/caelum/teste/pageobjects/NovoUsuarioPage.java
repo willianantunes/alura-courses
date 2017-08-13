@@ -1,4 +1,4 @@
-package br.com.caelum.teste;
+package br.com.caelum.teste.pageobjects;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;

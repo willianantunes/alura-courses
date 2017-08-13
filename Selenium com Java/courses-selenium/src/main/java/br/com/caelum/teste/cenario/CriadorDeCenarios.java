@@ -2,8 +2,8 @@ package br.com.caelum.teste.cenario;
 
 import org.openqa.selenium.WebDriver;
 
-import br.com.caelum.teste.LeiloesPage;
-import br.com.caelum.teste.UsuarioPage;
+import br.com.caelum.teste.pageobjects.LeiloesPage;
+import br.com.caelum.teste.pageobjects.UsuarioPage;
 
 public class CriadorDeCenarios {
 

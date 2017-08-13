@@ -1,4 +1,4 @@
-package br.com.caelum.teste;
+package br.com.caelum.teste.pageobjects;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
@@ -32,6 +32,14 @@ public class DetalhesDoLeilaoPage {
 		if (temUsuario) {
 			return driver.getPageSource().contains(String.valueOf(valor)); 
 		}
+		
+		/**
+		 * No exemplo abaixo estamos falando para que ele espere de maneira implícita 
+		 * até 10 segundos para um componente aparecer:
+		 * 		driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
+		 * Por exemplo, se fizermos o código abaixo o Selenium esperará até 10 segundos pelo elemento "surpresa" :
+		 * 		WebElement elementoSurpresa = driver.findElement(By.id("surpresa"));
+		 */
 		
 		return false;
 	}

@@ -10,6 +10,10 @@ import org.junit.*;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 
+import br.com.caelum.teste.pageobjects.HomePage;
+import br.com.caelum.teste.pageobjects.NovoUsuarioPage;
+import br.com.caelum.teste.pageobjects.UsuarioPage;
+
 public class UsuarioSystemTest {
 	private WebDriver driver = null;
 	private UsuarioPage usuarios = null;

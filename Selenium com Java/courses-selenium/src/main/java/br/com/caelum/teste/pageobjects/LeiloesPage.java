@@ -1,10 +1,12 @@
-package br.com.caelum.teste;
+package br.com.caelum.teste.pageobjects;
 
 import java.util.List;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
+
+import br.com.caelum.teste.config.URLDaAplicacao;
 
 public class LeiloesPage {
 	private WebDriver driver = null;
@@ -14,7 +16,7 @@ public class LeiloesPage {
 	}
 	
 	public void visita() {
-		driver.get("http://localhost:8080/leiloes");
+		driver.get(URLDaAplicacao.getUrlBase() + "/leiloes");
 	}
 	
 	public NovoLeilaoPage novo() {
