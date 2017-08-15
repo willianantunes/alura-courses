@@ -12,9 +12,16 @@ public class Leilao {
 	private boolean usado;
 	
 	public Leilao() {}
+
+	public Leilao(String nome, Double valorInicial, Usuario usuario, boolean usado) {
+		super();
+		this.nome = nome;
+		this.valorInicial = valorInicial;
+		this.usuario = usuario;
+		this.usado = usado;
+	}
 	
-	public Leilao(Long id, String nome, Double valorInicial, Usuario usuario,
-			boolean usado) {
+	public Leilao(Long id, String nome, Double valorInicial, Usuario usuario, boolean usado) {
 		super();
 		this.id = id;
 		this.nome = nome;
@@ -22,7 +29,6 @@ public class Leilao {
 		this.usuario = usuario;
 		this.usado = usado;
 	}
-
 
 	public void setNome(String nome) {
 		this.nome = nome;
