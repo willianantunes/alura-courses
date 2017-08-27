@@ -1,0 +1,25 @@
+> mvn archetype:generate -DartifactId=produtos -DgroupId=br.com.alura.maven -DinteractiveMode=false -DarchetypeArtifactId=maven-archetype-quickstart
+> mvn archetype:generate -D"artifactId=produtos" -D"groupId=br.com.alura.maven" -D"interactiveMode=false" -D"archetypeArtifactId=maven-archetype-quickstart"
+> mvn package
+> java -cp produtos-1.0-SNAPSHOT.jar br.com.alura.maven.App
+> mvn surefire-report:report
+# Executa o ciclo COMPILE de modo off-line
+> mvn -o compile 
+# O PMD é um analisador de código-fonte que consegue encontrar algumas falhas no nosso código, como por exemplo, variáveis que não estão sendo utilizadas.
+# Esse goal falha o build se existir alguma violação das regras do PMD no código-fonte.
+# https://maven.apache.org/plugins/maven-pmd-plugin/check-mojo.html
+> mvn pmd:check
+# Para gerar o relatório, você deve utilizar o comando mvn pmd:pmd. Caso existam violações no código-fonte, o arquivo pmd.html será criado em target/site, indicando quais são as violações.
+> mvn pmd:pmd
+# Adicione o plugin do JaCoCo ao projeto para que seja possível gerar relatórios sobre a cobertura de testes do projeto.
+# http://www.eclemma.org/jacoco/trunk/doc/maven.html
+# A mensagem `Skipping JaCoCo execution due to missing execution data` aparece quando não existe nenhuma classe de teste.
+# Crie uma dentro de src/test/java sem nenhum @Test, já será o suficiente para funcionar.
+> mvn jacoco:report
+# Em projetos com muitas dependências, com o passar do tempo elas podem ficar desatualizadas, caso você queira atualizar as dependências para suas versões mais atuais, poderá utilizar o seguinte comando:
+# http://www.mojohaus.org/versions-maven-plugin/use-latest-versions-mojo.html
+> mvn versions:use-latest-versions
+> mvn versions:display-dependency-updates
+# http://www.eclipse.org/jetty/documentation/current/jetty-maven-plugin.html#jetty-run-goal
+> mvn jetty:run
+# Para rodar/debugar por meio do Eclipse: http://www.softfinity.com/blog/debugging-with-the-maven-jetty-plugin-in-eclipse/
