@@ -1,0 +1,6 @@
+### Realizar download do JBoss Forge
+https://forge.jboss.org/download
+
+### Comandos iniciais para criar um projeto de teste
+> %FORGE_HOME%\bin\forge
+> project-new --named casadocodigo
