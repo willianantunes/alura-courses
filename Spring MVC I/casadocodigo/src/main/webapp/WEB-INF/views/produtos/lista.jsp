@@ -19,18 +19,26 @@
 			<td>Título</td>
 			<td>Descrição</td>
 			<td>Páginas</td>
+			<td>Data lançamento</td>
+			<td>Caminho sumário</td>
 		</tr>		
 		<c:forEach items="${produtos}" var="produto">
 			<tr>
 				<td>${produto.titulo}</td>
 				<td>${produto.descricao}</td>
 				<td>${produto.paginas}</td>
+				<td>${produto.dataLancamento}</td>
+				<td>${produto.sumarioPath}</td>
 			</tr>
 		</c:forEach>		
 	</table>
 	
 	<hr />
 	
-	<p>Cliquei <a href="<c:url value="/produtos/form" />">aqui</a> para cadastrar novos!</p>
+	<p>Cliquei <a href="<c:url value="/produtos/form" />">aqui</a> para cadastrar novos.</p>
+	
+	<hr />
+	
+	<p>Cliquei <a href="<c:url value="/limpa" />">aqui</a> para limpar a base.</p>
 </body>
 </html>
