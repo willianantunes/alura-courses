@@ -1,7 +1,6 @@
 package br.com.casadocodigo.loja.conf;
 
 import java.nio.charset.Charset;
-import java.nio.file.Paths;
 
 import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.Bean;
@@ -14,18 +13,28 @@ import org.springframework.format.support.FormattingConversionService;
 import org.springframework.web.multipart.MultipartResolver;
 import org.springframework.web.multipart.support.StandardServletMultipartResolver;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
+import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 import org.springframework.web.servlet.view.InternalResourceViewResolver;
 
 import br.com.casadocodigo.loja.controllers.HomeController;
 import br.com.casadocodigo.loja.daos.ProdutoDao;
 import br.com.casadocodigo.loja.infra.FileSaver;
+import br.com.casadocodigo.loja.models.CarrinhoCompras;
 
 @EnableWebMvc
-@ComponentScan(basePackageClasses = { HomeController.class, ProdutoDao.class, FileSaver.class })
-public class AppWebConfiguration {
+@ComponentScan(basePackageClasses = { HomeController.class, ProdutoDao.class, 
+		FileSaver.class, CarrinhoCompras.class })
+public class AppWebConfiguration extends WebMvcConfigurerAdapter {
 	@Bean
 	public InternalResourceViewResolver internalResourceViewResolver() {
-		return new InternalResourceViewResolver("/WEB-INF/views/", ".jsp");
+		InternalResourceViewResolver resolver = new InternalResourceViewResolver("/WEB-INF/views/", ".jsp");
+		
+		// Libera o uso dos beans nas JSPs
+		// resolver.setExposeContextBeansAsAttributes(true);
+		resolver.setExposedContextBeanNames("carrinhoCompras");
+		
+		return resolver;
 	}
 
 	@Bean
@@ -52,5 +61,10 @@ public class AppWebConfiguration {
 	@Bean
 	public MultipartResolver multipartResolver() {
 		return new StandardServletMultipartResolver();
+	}
+	
+	@Override
+	public void addResourceHandlers(ResourceHandlerRegistry registry) {
+		registry.addResourceHandler("/resources/**").addResourceLocations("/resources/");
 	}
 }
