@@ -1,18 +1,19 @@
 package br.com.casadocodigo.loja.models;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
 
 import javax.persistence.*;
 
-import org.hibernate.annotations.OnDelete;
-import org.hibernate.annotations.OnDeleteAction;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 @Entity
 @Data
+@EqualsAndHashCode(of = { "id" })
 public class Produto {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -30,4 +31,9 @@ public class Produto {
 	private List<Preco> precos;
 	
 	private String sumarioPath;
+
+	public BigDecimal precoPara(TipoPreco tipoPreco) {
+		return precos.stream().filter(p -> p.getTipo().equals(tipoPreco))
+				.findFirst().get().getValor();		
+	}
 }

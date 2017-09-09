@@ -16,6 +16,14 @@
 		<h2 style="color: red">Produto com o título ${produtoCadastrado.titulo} cadastrado com sucesso!</h2>
 	</c:if>	
 	
+	<c:if test="${not empty sucesso}">
+		<h2 style="color: red">${sucesso}!</h2>
+	</c:if>		
+	
+	<c:if test="${not empty falha}">
+		<h2 style="color: red">${falha}!</h2>
+	</c:if>		
+	
 	<table>
 		<tr>
 			<td>Id</td>
