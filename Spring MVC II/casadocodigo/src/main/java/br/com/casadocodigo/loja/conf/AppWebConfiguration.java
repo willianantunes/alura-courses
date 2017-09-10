@@ -115,6 +115,10 @@ public class AppWebConfiguration extends WebMvcConfigurerAdapter {
 	
 	@Override
 	public void addResourceHandlers(ResourceHandlerRegistry registry) {
-		registry.addResourceHandler("/resources/**").addResourceLocations("/resources/");
+		registry
+			.addResourceHandler("/resources/**").addResourceLocations("/resources/");
+		
+		registry
+			.addResourceHandler("/arquivos-sumario/**").addResourceLocations("/arquivos-sumario/");	
 	}
 }
