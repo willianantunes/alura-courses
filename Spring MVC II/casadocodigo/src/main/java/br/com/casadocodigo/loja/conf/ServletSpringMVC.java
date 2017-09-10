@@ -8,6 +8,7 @@ import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.ServletRegistration.Dynamic;
 
+import org.springframework.orm.jpa.support.OpenEntityManagerInViewFilter;
 import org.springframework.web.context.request.RequestContextListener;
 import org.springframework.web.filter.CharacterEncodingFilter;
 import org.springframework.web.servlet.support.AbstractAnnotationConfigDispatcherServletInitializer;
@@ -32,7 +33,12 @@ public class ServletSpringMVC extends AbstractAnnotationConfigDispatcherServletI
 	protected Filter[] getServletFilters() {
 		CharacterEncodingFilter encodingFilter = new CharacterEncodingFilter(Charset.forName("UTF-8").toString());
 		
-		return new Filter[] { encodingFilter };
+		/**
+		 * Para manter a sessão inclusive na view, basta incluir o filtro OpenEntityManagerInViewFilter 
+		 * para o Spring auxiliar no processo evitando assim LazyInitializationException...
+		 * return new Filter[] { encodingFilter, new OpenEntityManagerInViewFilter() };
+		 */
+		return new Filter[] { encodingFilter, new OpenEntityManagerInViewFilter() };
 	}
 	
 	@Override
