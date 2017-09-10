@@ -3,7 +3,7 @@
 <%@ taglib uri="http://www.springframework.org/tags/form" prefix="form" %>
 <%@ taglib prefix="tags" tagdir="/WEB-INF/tags" %>
 
-<%@ include file="/WEB-INF/views/cabecalho.jsp" %>
+<tags:pageTemplate titulo="${produto.titulo}">
 
 <article id="livro-css-eficiente">
 	<header id="product-highlight" class="clearfix">
@@ -49,4 +49,4 @@
 	</div>
 </article>
 
-<%@ include file="/WEB-INF/views/rodape.jsp" %>
+</tags:pageTemplate>

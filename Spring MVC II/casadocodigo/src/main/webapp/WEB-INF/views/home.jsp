@@ -2,9 +2,9 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@ taglib uri="http://www.springframework.org/tags" prefix="s" %>
 <%@ taglib uri="http://www.springframework.org/security/tags" prefix="security" %>
+<%@ taglib prefix="tags" tagdir="/WEB-INF/tags" %>
 
-<%@ include file="/WEB-INF/views/cabecalho.jsp" %>
-
+<tags:pageTemplate titulo="Livros de Java, Android, iOS, Mobile e muito mais...">
 
 <section id="index-section" class="container middle">
 
@@ -49,4 +49,4 @@
 	</ul>
 </section>
 
-<%@ include file="/WEB-INF/views/rodape.jsp" %>
+</tags:pageTemplate>
