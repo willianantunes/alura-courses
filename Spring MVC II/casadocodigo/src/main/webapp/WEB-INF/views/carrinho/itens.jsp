@@ -4,7 +4,6 @@
 <%@ taglib uri="http://www.springframework.org/tags/form" prefix="form" %>
 <%@ taglib tagdir="/WEB-INF/tags" prefix="tags" %>
 
-
 <tags:pageTemplate titulo="Seu carrinho de compras">
 
     <jsp:attribute name="extraScripts">
