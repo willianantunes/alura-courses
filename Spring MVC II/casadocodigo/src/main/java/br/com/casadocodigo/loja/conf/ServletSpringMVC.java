@@ -4,8 +4,11 @@ import java.nio.charset.Charset;
 
 import javax.servlet.Filter;
 import javax.servlet.MultipartConfigElement;
+import javax.servlet.ServletContext;
+import javax.servlet.ServletException;
 import javax.servlet.ServletRegistration.Dynamic;
 
+import org.springframework.web.context.request.RequestContextListener;
 import org.springframework.web.filter.CharacterEncodingFilter;
 import org.springframework.web.servlet.support.AbstractAnnotationConfigDispatcherServletInitializer;
 
@@ -35,5 +38,12 @@ public class ServletSpringMVC extends AbstractAnnotationConfigDispatcherServletI
 	@Override
 	protected void customizeRegistration(Dynamic registration) {
 		registration.setMultipartConfig(new MultipartConfigElement(""));
+	}
+	
+	@Override
+	public void onStartup(ServletContext servletContext) throws ServletException {
+		super.onStartup(servletContext);
+	    servletContext.addListener(new RequestContextListener());
+	    servletContext.setInitParameter("spring.profiles.active", "dev");
 	}
 }
