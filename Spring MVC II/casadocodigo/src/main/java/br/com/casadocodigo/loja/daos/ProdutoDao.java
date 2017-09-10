@@ -23,11 +23,12 @@ public class ProdutoDao {
 	}
 
 	public List<Produto> listar() {
-		return manager.createQuery("SELECT p FROM Produto p", Produto.class).getResultList();
+		return manager.createQuery("SELECT DISTINCT(p) FROM Produto p JOIN FETCH p.precos", Produto.class).getResultList();
 	}
 
 	public Produto find(Integer id) {
-		return manager.find(Produto.class, id);
+		// return manager.find(Produto.class, id);
+		return manager.createQuery("SELECT p FROM Produto p JOIN FETCH p.precos WHERE p.id = :id", Produto.class).setParameter("id", id).getSingleResult();
 	}
 	
 	public BigDecimal somaPrecosPorTipo(TipoPreco tipoPreco) {

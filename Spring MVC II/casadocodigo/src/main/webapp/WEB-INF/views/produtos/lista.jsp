@@ -65,6 +65,7 @@
 			<th>Id</th>
 			<th>Título</th>
 			<th>Descrição</th>
+			<th>Preços</th>
 			<th>Páginas</th>
 			<th>Data lançamento</th>
 			<th>Caminho sumário</th>
@@ -74,6 +75,7 @@
 				<td><a href="${s:mvcUrl('PC#detalhe').arg(0, produto.id).build()}">${produto.id}</a></td>
 				<td>${produto.titulo}</td>
 				<td>${produto.descricao}</td>
+				<td>${produto.precos}</td>
 				<td>${produto.paginas}</td>
 				<td>${produto.dataLancamento}</td>
 				<td>${produto.sumarioPath}</td>

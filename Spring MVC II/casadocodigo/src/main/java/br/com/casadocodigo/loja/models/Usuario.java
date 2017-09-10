@@ -27,7 +27,7 @@ public class Usuario implements UserDetails {
 	@Column(unique = true)
 	private String email;
 	private String senha;
-	@OneToMany(fetch = FetchType.EAGER)
+	@OneToMany
 	private List<Role> permissoes = new ArrayList<>();;
 	@Override
 	public Collection<? extends GrantedAuthority> getAuthorities() {

@@ -28,7 +28,7 @@ public class Produto {
 	 */
 	@DateTimeFormat(pattern = "dd/MM/yyyy")
 	private LocalDate dataLancamento;
-	@ElementCollection(fetch = FetchType.EAGER)
+	@ElementCollection
 	private List<Preco> precos = new ArrayList<>();
 	
 	private String sumarioPath;

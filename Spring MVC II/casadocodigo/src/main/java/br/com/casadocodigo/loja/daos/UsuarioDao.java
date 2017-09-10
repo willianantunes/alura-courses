@@ -21,7 +21,8 @@ public class UsuarioDao implements UserDetailsService {
 	@Override
 	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
 		try {
-			return entityManager.createQuery("SELECT u FROM Usuario u WHERE u.email = :email", Usuario.class)
+			return entityManager.createQuery("SELECT u FROM Usuario u "
+					+ "JOIN FETCH u.permissoes p WHERE u.email = :email", Usuario.class)
 					.setParameter("email", username)
 					.getSingleResult();
 		} catch (NoResultException e) {
