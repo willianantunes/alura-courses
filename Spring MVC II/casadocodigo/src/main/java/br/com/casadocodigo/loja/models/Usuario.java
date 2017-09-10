@@ -1,5 +1,6 @@
 package br.com.casadocodigo.loja.models;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
@@ -27,7 +28,7 @@ public class Usuario implements UserDetails {
 	private String email;
 	private String senha;
 	@OneToMany(fetch = FetchType.EAGER)
-	private List<Role> permissoes;
+	private List<Role> permissoes = new ArrayList<>();;
 	@Override
 	public Collection<? extends GrantedAuthority> getAuthorities() {
 		// TODO Auto-generated method stub

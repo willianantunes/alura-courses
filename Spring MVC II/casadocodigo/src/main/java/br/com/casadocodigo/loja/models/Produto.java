@@ -2,6 +2,7 @@ package br.com.casadocodigo.loja.models;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.*;
@@ -28,7 +29,7 @@ public class Produto {
 	@DateTimeFormat(pattern = "dd/MM/yyyy")
 	private LocalDate dataLancamento;
 	@ElementCollection(fetch = FetchType.EAGER)
-	private List<Preco> precos;
+	private List<Preco> precos = new ArrayList<>();
 	
 	private String sumarioPath;
 
