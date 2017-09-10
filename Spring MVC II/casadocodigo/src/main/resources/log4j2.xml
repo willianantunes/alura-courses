@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration>
+  <Properties>
+	<Property name="patternLayout">%d{dd MMM HH:mm:ss,SSS} %5p [%threadId] [%-20c{1}] %m%n</Property>
+  </Properties>
+
+  <Appenders>
+    <Console name="Console" target="SYSTEM_OUT">
+       <PatternLayout pattern="${patternLayout}"/>
+    </Console>
+  </Appenders>
+
+  <Loggers>
+	<!-- Application Loggers -->
+	<Logger name="br.com.casadocodigo" level="DEBUG"></Logger>
+	<!-- End of Application Loggers -->
+	
+	<!-- 3rd Party Loggers -->	
+    <Logger name="org.springframework" level="INFO"></Logger>
+    <Logger name="org.hibernate" level="INFO"></Logger>    
+    <Logger name="com.fasterxml.jackson" level="INFO"></Logger>
+    <Logger name="org.apache.commons" level="OFF"></Logger>
+    <!-- end of 3rd Party Loggers -->       
+
+    <Root level="INFO">
+      <AppenderRef ref="Console"/>
+    </Root>    
+  </Loggers>
+</Configuration>
