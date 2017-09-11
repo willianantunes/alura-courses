@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -27,7 +28,7 @@ public class Usuario implements UserDetails {
 	@Column(unique = true)
 	private String email;
 	private String senha;
-	@OneToMany
+	@OneToMany(cascade = CascadeType.PERSIST)
 	private List<Role> permissoes = new ArrayList<>();;
 	@Override
 	public Collection<? extends GrantedAuthority> getAuthorities() {

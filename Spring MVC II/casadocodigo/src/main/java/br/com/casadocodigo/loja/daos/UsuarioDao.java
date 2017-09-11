@@ -29,4 +29,8 @@ public class UsuarioDao implements UserDetailsService {
 			throw new UsernameNotFoundException("Usuário não encontrado pelo e-mail", e);
 		}
 	}
+
+	public void gravar(Usuario usuario) {
+		entityManager.persist(usuario);
+	}
 }

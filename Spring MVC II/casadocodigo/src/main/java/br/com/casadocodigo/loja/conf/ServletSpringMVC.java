@@ -16,7 +16,8 @@ import org.springframework.web.servlet.support.AbstractAnnotationConfigDispatche
 public class ServletSpringMVC extends AbstractAnnotationConfigDispatcherServletInitializer {
 	@Override
 	protected Class<?>[] getRootConfigClasses() {
-		return new Class[] { AppWebConfiguration.class, JPAConfiguration.class, MyWebSecurityConfiguration .class };
+		return new Class[] { AppWebConfiguration.class, JPAConfiguration.class, 
+				MyWebSecurityConfiguration.class, JPAProductionConfiguration.class };
 	}
 
 	@Override
@@ -46,10 +47,13 @@ public class ServletSpringMVC extends AbstractAnnotationConfigDispatcherServletI
 		registration.setMultipartConfig(new MultipartConfigElement(""));
 	}
 	
-	@Override
-	public void onStartup(ServletContext servletContext) throws ServletException {
-		super.onStartup(servletContext);
-	    servletContext.addListener(new RequestContextListener());
-	    servletContext.setInitParameter("spring.profiles.active", "dev");
-	}
+	/**
+	 * Necessário comentar pois agora o parâmetro é passado via plugin do Tomcat no Maven.
+	 */
+//	@Override
+//	public void onStartup(ServletContext servletContext) throws ServletException {
+//		super.onStartup(servletContext);
+//	    servletContext.addListener(new RequestContextListener());
+//	    servletContext.setInitParameter("spring.profiles.active", "dev");
+//	}
 }

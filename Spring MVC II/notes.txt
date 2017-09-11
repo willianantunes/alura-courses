@@ -1,0 +1,36 @@
+Para inserir o usuário de teste:
+
+INSERT INTO Role VALUES ('ROLE_ADMIN');
+INSERT INTO Usuario (email, nome, senha) 
+	VALUES ('antunes@willian.com.br', 'Antunes', '$2a$04$qP517gz1KNVEJUTCkUQCY.JzEoXzHFjLAhPQjrg5iP6Z/UmWjvUhq');
+INSERT INTO Usuario_Role(Usuario_id, permissoes_nome) VALUES (1, 'ROLE_ADMIN');
+
+No meu caso usei o SquirrelSQL por estar acostumado.
+
+####################################
+
+https://devcenter.heroku.com/articles/heroku-cli#windows
+https://devcenter.heroku.com/articles/getting-started-with-spring-mvc-hibernate#declare-process-types-with-procfile
+
+git init
+git add -A
+git commit -m "initial commit"
+heroku apps:create cdcspringmvc-antunes
+
+Criar arquivo Procfile na raiz do projeto com o conteúdo:
+```
+web: java $JAVA_OPTS -jar -Dspring.profiles.active=prod target/dependency/webapp-runner.jar --port $PORT target/*.war
+```
+
+git add .
+git commit -m "configurações de produção"
+git push heroku master
+
+Após aplicação subir acesar URL para testar serviço.
+
+// Para testar fluxo de autenticação de usuário em produção. Ver TesteController.java.
+git add .
+git commit -m "configurações de usuário padrão"
+git push heroku master
+
+No final do curso o instrutor liberou o link do projeto feito por ele: https://github.com/alura-cursos/springmvc-2-integracao-cache-seguranca-e-templates/archive/master.zip

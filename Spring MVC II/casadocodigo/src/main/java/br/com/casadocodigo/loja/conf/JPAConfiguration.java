@@ -21,13 +21,13 @@ import br.com.casadocodigo.loja.models.Produto;
 @EnableTransactionManagement
 public class JPAConfiguration {
 	@Bean
-	public LocalContainerEntityManagerFactoryBean entityManagerFactory(DataSource dataSource) {
+	public LocalContainerEntityManagerFactoryBean entityManagerFactory(DataSource dataSource, Properties aditionalProperties) {
 		LocalContainerEntityManagerFactoryBean factoryBean = new LocalContainerEntityManagerFactoryBean();
 		JpaVendorAdapter jpaVendorAdapter = new HibernateJpaVendorAdapter();
 
 		factoryBean.setJpaVendorAdapter(jpaVendorAdapter);
 		factoryBean.setDataSource(dataSource);
-		factoryBean.setJpaProperties(aditionalProperties());
+		factoryBean.setJpaProperties(aditionalProperties);
 		factoryBean.setPackagesToScan(Produto.class.getPackage().getName());
 
 		return factoryBean;
@@ -45,7 +45,9 @@ public class JPAConfiguration {
         return dataSource;
     }
     
-    private Properties aditionalProperties(){
+    @Bean
+    @Profile("dev")
+    public Properties aditionalProperties(){
         Properties props = new Properties();
 		props.setProperty("hibernate.dialect", HSQLDialect.class.getName());
 		props.setProperty("hibernate.show_sql", "true");
