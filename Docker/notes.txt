@@ -1,0 +1,280 @@
+##### !!!!! --> Aula 02: Trabalhando com as imagens
+
+> docker run hello-world
+> docker run ubuntu
+> docker ps
+> docker ps -a
+
+> docker run ubuntu echo "Ola Mundo"
+> docker run -it ubuntu
+
+### Executando novamente um container
+# Fazemos isso pegando id do container a ser iniciado pelo "docker ps -a" e passando-o ao comando "docker start [CONTAINER ID]"
+
+> docker start 05025384675e
+> docker stop 05025384675e
+
+##### --> Item 03: Layered File System
+
+> docker ps -a
+> docker rm [CONTAINER-ID]
+
+# Para remover todos da lista
+
+> docker container prune
+
+### Listando e removendo imagens
+
+> docker images
+> docker rmi hello-world
+
+##### --> Item 03: Praticando com o docker run
+
+> docker run dockersamples/static-site
+
+# Para não travar o terminal, podemos executá-lo sem atrelar o nosso terminal ao terminal do container para rodar em segundo plano:
+
+> docker run -d dockersamples/static-site
+
+### Acessando o site
+# Veja que no comando "docker ps" informa que a porta 80 e 443 estão liberadas para acessar o container internamente na rede do Docker, porém temos que liberar para acessar a partir de nossa máquina. A flag -P fará com que o Docker atribua uma porta aleatória.
+
+> docker run -d -P dockersamples/static-site
+
+CONTAINER ID        IMAGE                       COMMAND                  CREATED             STATUS              PORTS                                           NAMES
+5fde98f88a22        dockersamples/static-site   "/bin/sh -c 'cd /u..."   33 seconds ago      Up 32 seconds       0.0.0.0:32769->80/tcp, 0.0.0.0:32768->443/tcp   peaceful_mestorf
+
+# Outra maneira de ver as portas:
+
+> docker port 5fde98f88a22
+
+### Nomeando um container
+# A vantagem de dar um nome é não ficarmos dependentes dos ids e names aleatórios que o Docker atribui
+
+> docker run -d -P --name nome-coisado dockersamples/static-site
+> docker stop nome-coisado
+
+### Definindo uma porta específica
+# Em vez de -P usamos -p. Exemplo:
+
+> docker run -d -p 12345:80 dockersamples/static-site
+
+### Atribuindo uma variável de ambiente
+# É usado o flag -e. Veja em localhost:12345 que a variável é usada para alterar o texto.
+
+> docker run -d -p 12345:80 -e AUTHOR="Willian Antunes" dockersamples/static-site
+
+### Parando todos os containers de uma só vez
+# O comando "docker ps -q" lista apenas os IDs dos container rodando. Podemos passá-lo como parâmetro para parar todos de uma vez só:
+
+> docker stop $(docker ps -q)
+
+# O comando docker stop demora um pouco para ser executado pois ele espera 10 segundos para parar o container. Podemos diminuir esse tempo através da flag -t:
+
+> docker stop -t 0 $(docker ps -q)
+
+##### !!!!! --> Aula 02: Usando volumes
+
+##### --> Item 01: Salvando dados com volumes
+
+# O volume /var/www referenciado no comando abaixo foi criado para qual qual pasta do Docker Host? É possível saber pelo comando inspect.
+
+> docker run -v "/var/www" --name nome-vol-01 ubuntu
+
+> docker inspect nome-vol-01
+
+# Veja que na saída informa que "/var/www" foi mapeado para "/var/lib/docker/volumes/b0ae2d1a9be51a1d4f75aff3c16d577962b73b15fba0c44f164bb8352ef64131/_data", ou seja, tudo que for escrito em "/var/www" no container irá para a pasta mapeada no Docker Host.
+
+[
+    {
+        "Id": "70246bb2ed2f9ba70d572ebe02e9a7dd97ff7d0f37f39a1153b6c0e63b1e68bf",
+        "Created": "2017-10-22T22:17:20.78287884Z",
+        "Path": "/bin/bash",
+        "Args": [],
+        "State": {
+            "Status": "exited",
+            "Running": false,
+            "Paused": false,
+            "Restarting": false,
+            "OOMKilled": false,
+            "Dead": false,
+            "Pid": 0,
+            "ExitCode": 0,
+            "Error": "",
+            "StartedAt": "2017-10-22T22:17:21.112461498Z",
+            "FinishedAt": "2017-10-22T22:17:21.17394532Z"
+        },
+        "Image": "sha256:747cb2d60bbecbda48aff14a8be5c8b913ca69318a6067e57c697f8a78dda06e",
+        "ResolvConfPath": "/var/lib/docker/containers/70246bb2ed2f9ba70d572ebe02e9a7dd97ff7d0f37f39a1153b6c0e63b1e68bf/resolv.conf",
+        "HostnamePath": "/var/lib/docker/containers/70246bb2ed2f9ba70d572ebe02e9a7dd97ff7d0f37f39a1153b6c0e63b1e68bf/hostname",
+        "HostsPath": "/var/lib/docker/containers/70246bb2ed2f9ba70d572ebe02e9a7dd97ff7d0f37f39a1153b6c0e63b1e68bf/hosts",
+        "LogPath": "/var/lib/docker/containers/70246bb2ed2f9ba70d572ebe02e9a7dd97ff7d0f37f39a1153b6c0e63b1e68bf/70246bb2ed2f9ba70d572ebe02e9a7dd97ff7d0f37f39a1153b6c0e63b1e68bf-json.log",
+        "Name": "/nome-vol-01",
+        "RestartCount": 0,
+        "Driver": "overlay2",
+        "Platform": "linux",
+        "MountLabel": "",
+        "ProcessLabel": "",
+        "AppArmorProfile": "docker-default",
+        "ExecIDs": null,
+        "HostConfig": {
+            "Binds": null,
+            "ContainerIDFile": "",
+            "LogConfig": {
+                "Type": "json-file",
+                "Config": {}
+            },
+            "NetworkMode": "default",
+            "PortBindings": {},
+            "RestartPolicy": {
+                "Name": "no",
+                "MaximumRetryCount": 0
+            },
+            "AutoRemove": false,
+            "VolumeDriver": "",
+            "VolumesFrom": null,
+            "CapAdd": null,
+            "CapDrop": null,
+            "Dns": [],
+            "DnsOptions": [],
+            "DnsSearch": [],
+            "ExtraHosts": null,
+            "GroupAdd": null,
+            "IpcMode": "shareable",
+            "Cgroup": "",
+            "Links": null,
+            "OomScoreAdj": 0,
+            "PidMode": "",
+            "Privileged": false,
+            "PublishAllPorts": false,
+            "ReadonlyRootfs": false,
+            "SecurityOpt": null,
+            "UTSMode": "",
+            "UsernsMode": "",
+            "ShmSize": 67108864,
+            "Runtime": "runc",
+            "ConsoleSize": [
+                0,
+                0
+            ],
+            "Isolation": "",
+            "CpuShares": 0,
+            "Memory": 0,
+            "NanoCpus": 0,
+            "CgroupParent": "",
+            "BlkioWeight": 0,
+            "BlkioWeightDevice": [],
+            "BlkioDeviceReadBps": null,
+            "BlkioDeviceWriteBps": null,
+            "BlkioDeviceReadIOps": null,
+            "BlkioDeviceWriteIOps": null,
+            "CpuPeriod": 0,
+            "CpuQuota": 0,
+            "CpuRealtimePeriod": 0,
+            "CpuRealtimeRuntime": 0,
+            "CpusetCpus": "",
+            "CpusetMems": "",
+            "Devices": [],
+            "DeviceCgroupRules": null,
+            "DiskQuota": 0,
+            "KernelMemory": 0,
+            "MemoryReservation": 0,
+            "MemorySwap": 0,
+            "MemorySwappiness": null,
+            "OomKillDisable": false,
+            "PidsLimit": 0,
+            "Ulimits": null,
+            "CpuCount": 0,
+            "CpuPercent": 0,
+            "IOMaximumIOps": 0,
+            "IOMaximumBandwidth": 0
+        },
+        "GraphDriver": {
+            "Data": {
+                "LowerDir": "/var/lib/docker/overlay2/8d861542b761f720a08be0bd7bce0b9c7ae827191fe7011040b29e0372f555b2-init/diff:/var/lib/docker/overlay2/64ab69c9f91b0753a90b502ce8f9603392c9d25d0874219267d19a1d90cad6b5/diff:/var/lib/docker/overlay2/5c3e098bb9482420e28abdb791da56a6154d1a67f60821c4bbfb3a926b12d5f0/diff:/var/lib/docker/overlay2/3efa1269d8378d86fe0c17a95761e8f0e56fe73f2077bf291b9b7d97b0f165f5/diff:/var/lib/docker/overlay2/968ea8d2fda8b1af7e4f3908d21b3b6c091fb5c734fd97649bd3c0227794b307/diff:/var/lib/docker/overlay2/fef0a3d5acafa3d26be2e07998a2808bede033bf892398ca3ef6d4078169cebf/diff",
+                "MergedDir": "/var/lib/docker/overlay2/8d861542b761f720a08be0bd7bce0b9c7ae827191fe7011040b29e0372f555b2/merged",
+                "UpperDir": "/var/lib/docker/overlay2/8d861542b761f720a08be0bd7bce0b9c7ae827191fe7011040b29e0372f555b2/diff",
+                "WorkDir": "/var/lib/docker/overlay2/8d861542b761f720a08be0bd7bce0b9c7ae827191fe7011040b29e0372f555b2/work"
+            },
+            "Name": "overlay2"
+        },
+        "Mounts": [
+            {
+                "Type": "volume",
+                "Name": "b0ae2d1a9be51a1d4f75aff3c16d577962b73b15fba0c44f164bb8352ef64131",
+                "Source": "/var/lib/docker/volumes/b0ae2d1a9be51a1d4f75aff3c16d577962b73b15fba0c44f164bb8352ef64131/_data",
+                "Destination": "/var/www",
+                "Driver": "local",
+                "Mode": "",
+                "RW": true,
+                "Propagation": ""
+            }
+        ],
+        "Config": {
+            "Hostname": "70246bb2ed2f",
+            "Domainname": "",
+            "User": "",
+            "AttachStdin": false,
+            "AttachStdout": true,
+            "AttachStderr": true,
+            "Tty": false,
+            "OpenStdin": false,
+            "StdinOnce": false,
+            "Env": [
+                "PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"
+            ],
+            "Cmd": [
+                "/bin/bash"
+            ],
+            "ArgsEscaped": true,
+            "Image": "ubuntu",
+            "Volumes": {
+                "/var/www": {}
+            },
+            "WorkingDir": "",
+            "Entrypoint": null,
+            "OnBuild": null,
+            "Labels": {}
+        },
+        "NetworkSettings": {
+            "Bridge": "",
+            "SandboxID": "9aa4e6a011b1999a5b0a876841f9ec7e3c1da0613115d08708505f44bd534583",
+            "HairpinMode": false,
+            "LinkLocalIPv6Address": "",
+            "LinkLocalIPv6PrefixLen": 0,
+            "Ports": {},
+            "SandboxKey": "/var/run/docker/netns/9aa4e6a011b1",
+            "SecondaryIPAddresses": null,
+            "SecondaryIPv6Addresses": null,
+            "EndpointID": "",
+            "Gateway": "",
+            "GlobalIPv6Address": "",
+            "GlobalIPv6PrefixLen": 0,
+            "IPAddress": "",
+            "IPPrefixLen": 0,
+            "IPv6Gateway": "",
+            "MacAddress": "",
+            "Networks": {
+                "bridge": {
+                    "IPAMConfig": null,
+                    "Links": null,
+                    "Aliases": null,
+                    "NetworkID": "12e3953aa1a5ab5c44d54625e0bb2d6fd94953805d91d4c2d3e9acef5072ab21",
+                    "EndpointID": "",
+                    "Gateway": "",
+                    "IPAddress": "",
+                    "IPPrefixLen": 0,
+                    "IPv6Gateway": "",
+                    "GlobalIPv6Address": "",
+                    "GlobalIPv6PrefixLen": 0,
+                    "MacAddress": "",
+                    "DriverOpts": null
+                }
+            }
+        }
+    }
+]
+
+# Simulação de escrita no Desktop e visualização do arquivo no container.
+
+> docker run -it -v "/home/willian/Desktop:/var/www" ubuntu
