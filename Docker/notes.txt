@@ -73,7 +73,7 @@ CONTAINER ID        IMAGE                       COMMAND                  CREATED
 
 > docker stop -t 0 $(docker ps -q)
 
-##### !!!!! --> Aula 02: Usando volumes
+##### !!!!! --> Aula 03: Usando volumes
 
 ##### --> Item 01: Salvando dados com volumes
 
@@ -278,3 +278,108 @@ CONTAINER ID        IMAGE                       COMMAND                  CREATED
 # Simulação de escrita no Desktop e visualização do arquivo no container.
 
 > docker run -it -v "/home/willian/Desktop:/var/www" ubuntu
+
+##### --> Item 04: Rodando código em um container
+
+# A pasta mapeada deverá conter o projeto de exemplo descompactado. Como ele sobe a porta 3000, é necessário mapear uma do Docker Host para acesso. A flag -w representa Working Directory, isto é, qual diretório o terminal iniciará para executar o comando "npm start", uma vez que é dentro de "/var/www" que o arquivo package.json.
+
+> docker run -p 8080:3000 -v "/home/willian/Desktop/volume-exemplo:/var/www" -w "/var/www" node npm start
+
+# Poderíamos desenvolver em node e testar usando container (sem instalar o node) por exemplo rodando a partir da pasta atual executando o comando pwd:
+
+> docker run -p 8080:3000 -v "$(pwd):/var/www" -w "/var/www" node npm start
+
+##### !!!!! --> Aula 04: Construindo nossas próprias imagens
+
+# Para dizer a imagem-base que queremos, utilizamos a palavra FROM mais o nome da imagem.
+# FROM node
+# Para informar a versão, colocamos depois da imagem, por padrão é considerado latest caso não seja informado.
+# FROM node:latest
+
+# Outra instrução que é comum colocarmos é quem cuida, quem criou a imagem, através do MAINTAINER:
+# FROM node:latest
+# MAINTAINER Willian Antunes
+
+# Para colocar tudo que está dentro da pasta do Dockerfile e copiar para /var/www, ficaria assim:
+# FROM node:latest
+# MAINTAINER Willian Antunes
+# COPY . /var/www
+
+# No projeto, já temos as suas dependências dentro da pasta node_modules, porém é melhor o node instalar as dependências pois podem estar desatualizadas. Para executar um comando usamos RUN:
+# FROM node:latest
+# MAINTAINER Willian Antunes
+# COPY . /var/www
+# RUN npm install
+
+# Toda imagem possui um comando que é executado quando ela inicia. O comando "npm start" foi utilizado na linha 286 neste arquivo. Para isso, utilizamos o ENTRYPOINT, que executará o comando que quisermos assim que o container for carregado:
+# FROM node:latest
+# MAINTAINER Willian Antunes
+# COPY . /var/www
+# RUN npm install
+# ENTRYPOINT npm start
+
+# Também podemos passar o comando como se fosse em um array, por exemplo ["npm", "start"], ambos funcionam.
+
+# Falta colocarmos a porta em que a aplicação executará, a porta em que ela ficará exposta. Para isso, utilizamos o EXPOSE:
+# FROM node:latest
+# MAINTAINER Willian Antunes
+# COPY . /var/www
+# RUN npm install
+# ENTRYPOINT npm start
+# EXPOSE 3000
+
+# Para funcionar o comando "npm start" precisa ser executado dentro de /var/www, usamos o comando WORKDIR. Assim que copiarmos o projeto, dizemos em qual diretório iremos trabalhar;
+# FROM node:latest
+# MAINTAINER Willian Antunes
+# COPY . /var/www
+# WORKDIR /var/www
+# RUN npm install
+# ENTRYPOINT npm start
+# EXPOSE 3000
+
+# O Dockerfile acima é análogo ao comando da linha 286.
+
+### Criando a imagem
+
+# Por padrão é considerado Dockerfile o nome do arquivo, mas poderia ser algumaCoisa.dockerfile, a flag -f permite informar o nome do arquivo. A flag -t serve para passar a tag da imagem, por exemplo wantunes/aluranode. O último parâmetro é o local do arquivo Dockerfile, no caso o próprio diretório que é representado por "."
+
+> docker build -f Dockerfile -t wantunes/aluranode .
+
+### Criando um container a partir da nossa imagem
+
+> docker run -d -p 8080:3000 wantunes/aluranode
+
+##### !!!!! --> Aula 05: Networking no Docker
+
+# No Docker, por padrão, já existe uma default network. Isso significa que, quando criamos os nossos containers, por padrão eles funcionam na mesma rede: 172.168.0.1, 172.168.0.2, 172.168.0.3 e por aí vai...
+
+# Faça testes usando "docker inspect {id-container}" e verificando o ip do container, ping, etc.	
+
+# Obs.: Na rede padrão do Docker, só podemos realizar a comunicação utilizando IPs, mas se criarmos a nossa própria rede, podemos "batizar" os nossos containers, e realizar a comunicação entre eles utilizando os seus nomes.
+
+### Comunicação entre containers utilizando os seus nomes
+
+> docker network create --driver bridge minha-rede
+
+> docker run -it --name primeiro-ubuntu --network minha-rede ubuntu
+
+> docker run -it --name segundo-ubuntu --network minha-rede ubuntu
+
+# Agora, no segundo-ubuntu, use o ping e teste a comunicação com o primeiro-ubuntu.
+
+> apt-get update && apt-get install -y iputils-ping
+> ping primeiro-ubuntu
+
+# Para excluir rede:
+
+> docker network rm minha-rede
+
+##### --> Item 04: Pegando dados de um banco -> https://cursos.alura.com.br/course/docker-e-docker-compose/task/29441
+
+> docker pull douglasq/alura-books:cap05
+> docker pull mongo
+
+> docker run -d --name meu-mongo --network minha-rede mongo
+> docker run --network minha-rede -d -p 8080:3000 douglasq/alura-books:cap05
+
+# Agora, acessamos a página http://localhost:8080/seed/ para salvar os livros no banco de dados. Após isso, acessamos a página http://localhost:8080/ e vemos os dados livros são extraídos do banco e são exibidos na página. Para provar isso, podemos parar a execução do meu-mongo e atualizar a página, veremos que nenhum livro mais será exibido.
